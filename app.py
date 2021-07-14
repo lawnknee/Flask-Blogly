@@ -41,13 +41,15 @@ def add_user():
     """Processes the add new user form.
     Redirects to /users with list of all users."""
     
-    first_name = request.form['first']
-    last_name = request.form['last']
-    image_url = request.form['img-url']
+    first = request.form['first']
+    last = request.form['last']
+    image = request.form['img-url']
     
-    # insert user into user database
-    # pull back users and pass into redirect
-    
+    # insert this info into DB TODO: refactor for helper function elsehere
+    new_user = User(first_name=first, last_name=last, image_url=image)
+    db.session.add(new_user)
+    db.session.commit()
+
     return redirect('/users')
 
 @app.route('/users/<int:user_id>')
@@ -55,9 +57,9 @@ def show_user_info(user_id):
     """Shows information about the given user,
     with option to edit or delete the user."""
     
-    # access database using user_id
+    user = User.query.get(user_id)
     
-    return render_template('user_detail.html')
+    return render_template('user_detail.html', user=user)
 
 @app.route('/users/<int:user_id>/edit')
 def edit_user_info(user_id):
