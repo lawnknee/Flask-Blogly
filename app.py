@@ -15,3 +15,12 @@ from flask_debugtoolbar import DebugToolbarExtension
 app.config['SECRET_KEY'] = "SECRET!"
 debug = DebugToolbarExtension(app)
 
+@app.route('/')
+def main_page():
+
+	return render_template('user_listing.html', user="Someone")  # TODO: rename user for later
+
+@app.route('/users/new')
+def show_add_user_form():
+
+	return render_template('user_form.html')

@@ -2,7 +2,7 @@
 
 {% block title %} User {% endblock %}
 
-{% BLOCK CONTENT %}
+{% block CONTENT %}
 
   <h1>Users</h1>
 
@@ -11,8 +11,10 @@
       <li>{{ user }}</li>
   {% endfor %}
   </ul>
-
-  <button type="submit">
-    Add user
-  </button>
+  <form action="/user/new" method="get">
+    <button type="submit">
+      Add user
+    </button>
+  </form>
+  
 {% endblock %}
