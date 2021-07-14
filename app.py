@@ -26,7 +26,9 @@ def show_users():
     """Shows all users as links with a button to add a new user. 
     Clicking on the link will go to the user's detail page."""
     
-    return render_template('user_listing.html', user="Someone")  # TODO: rename user for later
+    allUsers = User.query.all()    
+    
+    return render_template('user_listing.html', users=allUsers)  # TODO: rename user for later
 
 @app.route('/users/new', methods=["GET"])
 def show_add_user_form():
@@ -52,6 +54,8 @@ def add_user():
 def show_user_info(user_id):
     """Shows information about the given user,
     with option to edit or delete the user."""
+    
+    # access database using user_id
     
     return render_template('user_detail.html')
 
