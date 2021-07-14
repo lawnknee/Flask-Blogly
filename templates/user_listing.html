@@ -5,14 +5,14 @@
 {% block CONTENT %}
 
   <h1>Users</h1>
-
+  <!-- User Listing -->
   <ul>
   {% for user in users %}
       <li><a href="/users/{{user-id}}">{{ user }}</a></li>
   {% endfor %}
   </ul>
   
-  <form action="/user/new" method="get">
+  <form action="/users/new" method="GET">
     <button type="submit">
       Add user
     </button>
