@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-DEFAULT_URL = 'https://rithm-students-media.s3.amazonaws.com/CACHE/images/user_photos/brit/480dfb17-4431-4d8d-86f9-6c85b6571e7b-brit/819782924da7552d2e53d3d14da53865.jpeg'
+DEFAULT_URL = 'https://lorempixel.com/400/400/cats/'
 
 def connect_db(app):
     """Connect to database."""
