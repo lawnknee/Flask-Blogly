@@ -56,8 +56,9 @@ def show_user_info(user_id):
     with option to edit or delete the user."""
     
     user = User.query.get_or_404(user_id)
+    posts = Post.query.filter_by(user_id=user_id).all()
     
-    return render_template('user_detail.html', user=user)
+    return render_template('user_detail.html', user=user, posts=posts)
 
 @app.route('/users/<int:user_id>/edit')
 def edit_user_info(user_id):
@@ -113,8 +114,17 @@ def submit_post_form(user_id):
     post_content = request.form['content']
 
     # update database
-    user_post = Post(title=post_title,content=post_content)
+    user_post = Post(title=post_title,content=post_content, user_id=user_id)
     db.session.add(user_post)
     db.session.commit()    
 
     return redirect(f'/users/{user_id}')
+
+@app.route('/posts/<int:post_id>')
+def post_details(post_id):
+
+    post = Post.query.get(post_id)
+    user_id = post.user_id 
+    user = User.query.get(user_id)
+    
+    return render_template('user_post_detail.html', user=user, post=post)
