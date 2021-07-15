@@ -102,6 +102,7 @@ class PostTestCase(TestCase):
         db.session.rollback()
     
     def test_show_post_form(self):
+        """Tests if add new post form loads."""
         
         with app.test_client() as client:
             resp = client.get(f'/users/{self.test_user.id}/posts/new')
@@ -109,8 +110,11 @@ class PostTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn('User New Post Form', html)
+            # test invalid user_id route to 404
     
-    def test_show_post_form_submit(self):
+    def test_submit_post_form(self):
+        """Tests if new post was successfully submitted."""
+        
         with app.test_client() as client:
             data = {
                 "title": self.test_post.title, 
@@ -128,7 +132,58 @@ class PostTestCase(TestCase):
             
             # check for valid updates
             self.assertIn(f'{data["title"]}', html)
+            
+    def test_post_details(self):
+        """Tests if post details page loads."""
+        
+        with app.test_client() as client:
+            resp = client.get(f'/posts/{self.test_post.id}')
+            html = resp.get_data(as_text=True)
+            
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Post Details Page', html)
+            self.assertIn(f'{self.test_post.title}', html)
+            
+    def test_edit_post(self):
+        """Tests if edit post page loads."""
+        
+        with app.test_client() as client:
+            resp = client.get(f'/posts/{self.test_post.id}/edit')
+            html = resp.get_data(as_text=True)
 
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Edit Post Page', html)
+            self.assertIn(f'{self.test_post.title}', html)
+            
+    def test_edit_post_submit(self):
+        """Tests if edited post routes back to post view page,
+        with edited post."""
 
+        with app.test_client() as client:
+            data = {
+                "title": 'new_test_title', 
+                "content": 'new_test_content',
+                "user_id": self.test_post.user_id
+            }
+            resp = client.post(f'/posts/{self.test_post.id}/edit', 
+                               data=data,
+                               follow_redirects=True)
+            html = resp.get_data(as_text=True)
+            
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('Post Details Page', html)
+            self.assertIn(f'{data["title"]}', html)
+            self.assertIn(f'{data["content"]}', html)
+        
+    def test_delete_post(self):
+        """Tests if current post gets deleted and user gets 
+        redirected back to user details page."""
 
+        with app.test_client() as client:
+            resp = client.get(f'/posts/{self.test_post.id}/delete',
+                              follow_redirects=True)
+            html = resp.get_data(as_text=True)
 
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('User Detail Page', html)
+            self.assertNotIn(f'{self.test_post.title}', html)

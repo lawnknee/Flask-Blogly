@@ -26,6 +26,7 @@ db.session.commit()
 
 # Add posts
 post1 = Post(title='Breaking News!', content='New Coding Language Found!', user_id=1)
+post2 = Post(title='')
 
 # Add new post objects to session, so they'll persist
 db.session.add(post1)
