@@ -10,14 +10,7 @@
 		<div class="col-md-8">
 			<div class="card-body">
 			<h3 class="card-title">{{ user.first_name}} {{user.last_name}}</h3> <!-- Will change later-->
-			
-			<!-- <form action="/users/{{user.id}}/edit">
-				<button type="submit">Edit</button>	
-			</form>
-			
-			<form action="/users/{{user.id}}/delete" method="POST">
-				<button type="submit"> Delete </button>
-			</form> -->
+		
 
 			<form>
 				<button 
@@ -31,6 +24,20 @@
 					type="submit">Edit
 				</button>	
 			</form>
+			
+			<!-- Post Lists -->
+			<section>
+
+				<h1>Posts</h1>
+				<ul>
+				{% for post in posts %}
+					<li>{{post.title}}</li>
+				{% endfor %}
+				</ul>
+			</section>
+			<!-- New Post Button -->
+			<a href="/users/{{user.id}}/posts/new" class="btn btn-primary"> Add Post</a> 
+			
 
 		</div>
 		</div>
@@ -38,3 +45,14 @@
 	</div>
 
 {% endblock %}
+
+
+
+<!-- Previous code -->
+<!-- <form action="/users/{{user.id}}/edit">
+	<button type="submit">Edit</button>	
+</form>
+
+<form action="/users/{{user.id}}/delete" method="POST">
+	<button type="submit"> Delete </button>
+</form> -->

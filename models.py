@@ -1,5 +1,5 @@
 """Models for Blogly."""
-
+import datetime
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -24,23 +24,6 @@ class User(db.Model):
                            nullable=False)
     last_name = db.Column(db.Text,
                           nullable=False)
-<<<<<<< HEAD
-    image_url = db.Column(db.Text)
-    db.relationship('')
-    
-    
-
-def add_new_user(first, 
-                 last, 
-                 image = default_url):
-
-    image=image if (not image) else default_url
-
-    new_user = User(first_name=first, last_name=last, image_url=image)
-    db.session.add(new_user)
-    db.session.commit()
-
-=======
     image_url = db.Column(db.Text,
                           default=DEFAULT_URL)
     
@@ -58,4 +41,15 @@ def add_new_user(first,
         # db.session.commit() 
         # should never commit in method
         # always commit in the view function to close out the transaction
->>>>>>> a6ca0a2b91b4081ee09a549e7b173786b8da17d2
+
+class Post(db.Model):
+
+    __tablename__ = "posts"
+
+    id = db.Column(db.Integer,
+                    primary_key=True,
+                    autoincrement=True)
+    title = db.Column(db.Text, nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.datetime.now)
+    user = db.Column(db.Integer, db.ForeignKey('users.id'))
