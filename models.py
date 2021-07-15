@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+default_url = 'https://pbs.twimg.com/profile_images/1237550450/mstom_400x400.jpg'
+
 def connect_db(app):
     """Connect to database."""
 
@@ -23,3 +25,12 @@ class User(db.Model):
     last_name = db.Column(db.Text,
                           nullable=False)
     image_url = db.Column(db.Text)
+    
+    @classmethod
+    def add_new_user(first, 
+                     last, 
+                     image = default_url):
+        
+        new_user = User(first_name=first, last_name=last, image_url=image)
+        db.session.add(new_user)
+        db.session.commit()

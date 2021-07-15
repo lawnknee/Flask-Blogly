@@ -67,16 +67,26 @@ def edit_user_info(user_id):
     Cancel button returns to details page for the user,
     and Save button updates the user information."""
     
-    return render_template('user_edit.html')
+    user = User.query.get(user_id)
+    
+    return render_template('user_edit.html', user=user)
 
 @app.route('/users/<int:user_id>/edit', methods=["POST"])
 def process_user_edit(user_id):
     """Processes the edit form and returns user to the
     /users page with updated user listing."""
     
-    # process edit form
-    # update database
-    # get updated user info back from database
+    first = request.form['fn']
+    last = request.form['ln']
+    image = request.form['img']
+    
+    user = User.query.get(user_id)
+    
+    user.first_name = first
+    user.last_name = last
+    user.image_url = image
+    
+    db.session.commit()
 
     return redirect('/users')
 
@@ -84,6 +94,9 @@ def process_user_edit(user_id):
 def delete_user(user_id):
     """Deletes the user and redirects back to main page."""
     
-    # delete user from database
+    user = User.query.filter_by(id=user_id).one()
+    
+    db.session.delete(user)
+    db.session.commit()
     
     return redirect('/')

@@ -3,20 +3,21 @@
 {% block CONTENT %} 
 	<h1> Edit a user</h1>
 	<!-- Edit User Form -->
-	<form action="/" method="post">
+	<form action="/users/{{ user.id }}/edit" method="post">
 		<!-- First Name Input -->
 		<label for="fn">First Name</label>
-		<input type="text" placeholder="Enter a first name" id="fn">
+		<input type="text" name="fn" value="{{ user.first_name}}" id="fn">
 		<!-- Last Name Input -->
 		<label for="ln">Last Name</label>
-		<input type="text" placeholder="Enter a last name">
+		<input type="text" name="ln" value="{{ user.last_name}}">
 		<!-- Image URL Input -->
 		<label for="img-url">Image URL</label>
-		<input type="text" id="img-url">
+		<input type="text" name="img" value="{{ user.image_url }}" id="img-url">
 
 		<!-- Form buttons -->
-		<button type="submit">Cancel</button>
-		<button type="submit">Save</button>
+		<a href="/users" class="btn btn-primary">Cancel</a>
+		
+		<button type="submit" class="btn btn-success">Save</button>
 	</form>
 
 {% endblock %}
