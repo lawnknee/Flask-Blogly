@@ -20,7 +20,9 @@ def main_page():
     """Main page redirects to list of users."""
     
     return redirect('/users')
-                 
+
+# Handle user routes
+
 @app.route('/users')
 def show_users():
     """Shows all users as links with a button to add a new user. 
@@ -100,6 +102,7 @@ def delete_user(user_id):
     
     return redirect('/users')
 
+# Handle Posts
 
 @app.route('/users/<user_id>/posts/new')
 def show_post_form(user_id):
