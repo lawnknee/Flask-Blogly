@@ -103,11 +103,15 @@ def delete_user(user_id):
 
 @app.route('/users/<user_id>/posts/new')
 def show_post_form(user_id):
+    """Shows add post form to user."""
+    
     user = User.query.get_or_404(user_id)
     return render_template('user_post.html',user=user)
 
 @app.route('/users/<user_id>/posts/new', methods=['POST'])
 def submit_post_form(user_id):
+    """Handles submitting new post form.
+    Adds post to database and redirects to user detail page."""
 
     # get responses from form
     post_title = request.form['title']
@@ -124,31 +128,51 @@ def submit_post_form(user_id):
 
 @app.route('/posts/<int:post_id>')
 def post_details(post_id):
+    """Shows details about a post with buttons to 
+    edit or delete current post. (post view)"""
 
-    post = Post.query.get(post_id)
+    post = Post.query.get_or_404(post_id)
     user_id = post.user_id 
-    user = User.query.get(user_id)
+    user = User.query.get_or_404(user_id)
     
     return render_template('user_post_detail.html', user=user, post=post)
 
 @app.route('/posts/<int:post_id>/edit')
 def edit_post(post_id):
+    """Shows form to edit a post. (edit view)
+    Hitting cancel returns to post view."""
 
-    post = Post.query.get(post_id)
+    post = Post.query.get_or_404(post_id)
     return render_template('user_post_edit.html',post=post)
 
 @app.route('/posts/<int:post_id>/edit', methods=["POST"])
 def edit_post_submit(post_id):
+    """Handles changes made to a existing post. 
+    Updates the post in the database and redirects 
+    back to post view."""
 
     # get form  values
     post_title = request.form['title']
     post_content = request.form['content']
     
     # update post
-    post = Post.query.get(post_id)
+    post = Post.query.get_or_404(post_id)
     post.title = post_title
     post.content = post_content
 
     db.session.commit()
     
     return redirect(f'/posts/{post_id}')
+
+@app.route('/posts/<int:post_id>/delete')
+def delete_post(post_id):
+    """Deletes the current post and redirects back to
+    user details page."""
+    
+    post = Post.query.get_or_404(post_id)
+    user_id = post.user_id 
+    
+    db.session.delete(post)
+    db.session.commit()
+    
+    return redirect(f'/users/{user_id}')

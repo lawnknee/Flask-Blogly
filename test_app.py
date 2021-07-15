@@ -64,4 +64,6 @@ class UserTestCase(TestCase):
             
             self.assertEqual(resp.status_code, 200)
             self.assertIn('Edit User Form', html)
+            
+    
 
