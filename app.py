@@ -114,7 +114,9 @@ def submit_post_form(user_id):
     post_content = request.form['content']
 
     # update database
-    user_post = Post(title=post_title,content=post_content, user_id=user_id)
+    user_post = Post(title=post_title,
+                     content=post_content, 
+                     user_id=user_id)
     db.session.add(user_post)
     db.session.commit()    
 
