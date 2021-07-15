@@ -25,6 +25,7 @@ class User(db.Model):
     last_name = db.Column(db.Text,
                           nullable=False)
     image_url = db.Column(db.Text)
+    db.relationship('')
     
     
 
@@ -37,3 +38,4 @@ def add_new_user(first,
     new_user = User(first_name=first, last_name=last, image_url=image)
     db.session.add(new_user)
     db.session.commit()
+
