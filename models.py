@@ -26,7 +26,9 @@ class User(db.Model):
                           nullable=False)
     image_url = db.Column(db.Text,
                           default=DEFAULT_URL)
-    
+    # NOTE: why doesn't it work 
+    # posts = db.relationship('Post', backref='user')
+
     
     @classmethod
     def add_new_user(cls, first, last, image):
@@ -53,3 +55,4 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    
