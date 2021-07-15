@@ -1,7 +1,7 @@
 """Blogly application."""
 
 from flask import Flask, request, redirect, render_template
-from models import db, connect_db, User, add_new_user
+from models import db, connect_db, User
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///flask_blogly'
@@ -43,10 +43,10 @@ def add_user():
     
     first = request.form['first']
     last = request.form['last']
-    image = request.form['img-url']
+    image = request.form['img-url'] or None
     
-    # insert this info into DB TODO: refactor for helper function elsehere
-    add_new_user(first, last, image)
+    User.add_new_user(first, last, image)
+    db.session.commit()
 
     return redirect('/users')
 
@@ -55,7 +55,7 @@ def show_user_info(user_id):
     """Shows information about the given user,
     with option to edit or delete the user."""
     
-    user = User.query.get(user_id)
+    user = User.query.get_or_404(user_id)
     
     return render_template('user_detail.html', user=user)
 
@@ -65,7 +65,7 @@ def edit_user_info(user_id):
     Cancel button returns to details page for the user,
     and Save button updates the user information."""
     
-    user = User.query.get(user_id)
+    user = User.query.get_or_404(user_id)
     
     return render_template('user_edit.html', user=user)
 
@@ -76,9 +76,9 @@ def process_user_edit(user_id):
     
     first = request.form['fn']
     last = request.form['ln']
-    image = request.form['img']
+    image = request.form['img'] or None
     
-    user = User.query.get(user_id)
+    user = User.query.get_or_404(user_id)
     
     user.first_name = first
     user.last_name = last
@@ -92,9 +92,9 @@ def process_user_edit(user_id):
 def delete_user(user_id):
     """Deletes the user and redirects back to main page."""
     
-    user = User.query.filter_by(id=user_id).one()
+    user = User.query.get_or_404(user_id)
     
     db.session.delete(user)
     db.session.commit()
     
-    return redirect('/')
+    return redirect('/users')

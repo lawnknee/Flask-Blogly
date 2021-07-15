@@ -11,12 +11,25 @@
 			<div class="card-body">
 			<h3 class="card-title">{{ user.first_name}} {{user.last_name}}</h3> <!-- Will change later-->
 			
-			<form action="/users/{{user.id}}/edit">
+			<!-- <form action="/users/{{user.id}}/edit">
 				<button type="submit">Edit</button>	
 			</form>
 			
 			<form action="/users/{{user.id}}/delete" method="POST">
 				<button type="submit"> Delete </button>
+			</form> -->
+
+			<form>
+				<button 
+					formaction="/users/{{user.id}}/delete" 
+					formmethod="POST" 
+					type="submit"> Delete 
+				</button>
+				<button 
+					formaction="/users/{{user.id}}/edit" 
+					formmethod="GET" 
+					type="submit">Edit
+				</button>	
 			</form>
 
 		</div>
