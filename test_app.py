@@ -90,11 +90,12 @@ class PostTestCase(TestCase):
 
         # create a test db
         Post.query.delete()
-        test_post = Post(title="test_title", 
+        self.test_post = Post(title="test_title", 
                         content="test_content", 
                         user_id=self.test_user.id)
-        db.session.add(test_post)
+        db.session.add(self.test_post)
         db.session.commit()
+        
     
     def tearDown(self):
         """Clean up any fouled transaction"""
@@ -108,6 +109,26 @@ class PostTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn('User New Post Form', html)
+    
+    def test_show_post_form_submit(self):
+        with app.test_client() as client:
+            data = {
+                "title": self.test_post.title, 
+                "content": self.test_post.content,
+                "user_id": self.test_post.user_id
+            }
+            resp = client.post(f'/users/{self.test_user.id}/posts/new', 
+                                data=data, 
+                                follow_redirects=True)
+            html = resp.get_data(as_text=True)
+            
+            # checks for redirect 
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('User Detail Page ', html)
+            
+            # check for valid updates
+            self.assertIn(f'{data["title"]}', html)
+
 
 
 
