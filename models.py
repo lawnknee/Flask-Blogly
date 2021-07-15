@@ -26,11 +26,14 @@ class User(db.Model):
                           nullable=False)
     image_url = db.Column(db.Text)
     
-    @classmethod
-    def add_new_user(first, 
-                     last, 
-                     image = default_url):
-        
-        new_user = User(first_name=first, last_name=last, image_url=image)
-        db.session.add(new_user)
-        db.session.commit()
+    
+
+def add_new_user(first, 
+                 last, 
+                 image = default_url):
+
+    image=image if (not image) else default_url
+
+    new_user = User(first_name=first, last_name=last, image_url=image)
+    db.session.add(new_user)
+    db.session.commit()

@@ -1,7 +1,7 @@
 """Blogly application."""
 
 from flask import Flask, request, redirect, render_template
-from models import db, connect_db, User
+from models import db, connect_db, User, add_new_user
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///flask_blogly'
@@ -46,9 +46,7 @@ def add_user():
     image = request.form['img-url']
     
     # insert this info into DB TODO: refactor for helper function elsehere
-    new_user = User(first_name=first, last_name=last, image_url=image)
-    db.session.add(new_user)
-    db.session.commit()
+    add_new_user(first, last, image)
 
     return redirect('/users')
 
