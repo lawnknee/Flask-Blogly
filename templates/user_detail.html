@@ -9,37 +9,38 @@
 		</div>
 		<div class="col-md-8">
 			<div class="card-body">
-			<h3 class="card-title">{{ user.first_name}} {{user.last_name}}</h3> <!-- Will change later-->
+				<h3 class="card-title">{{ user.first_name}} {{user.last_name}}</h3> <!-- Will change later-->
 		
 
-			<form>
-				<button 
-					formaction="/users/{{user.id}}/delete" 
-					formmethod="POST" 
-					type="submit"> Delete 
-				</button>
-				<button 
-					formaction="/users/{{user.id}}/edit" 
-					formmethod="GET" 
-					type="submit">Edit
-				</button>	
-			</form>
-			
-			<!-- Post Lists -->
-			<section>
+				<form>
+					<button 
+						class="btn btn-danger"
+						formaction="/users/{{user.id}}/delete" 
+						formmethod="POST" 
+						type="submit"> Delete 
+					</button>
+					<button 
+						class="btn btn-secondary"
+						formaction="/users/{{user.id}}/edit" 
+						formmethod="GET" 
+						type="submit">Edit
+					</button>	
+				</form>
+			</div>
 
-				<h1>Posts</h1>
-				<ul>
-				{% for post in posts %}
-					<li><a href="/posts/{{ post.id }}"> {{ post.title }} </a></li>
-				{% endfor %}
-				</ul>
-			</section>
-			<!-- New Post Button -->
-			<a href="/users/{{user.id}}/posts/new" class="btn btn-primary"> Add Post</a> 
-			
+			<div class=card-body>
+				<!-- Post Lists -->
+				<h3 class="card-title">Posts</h3>
+					<ul>
+					{% for post in posts %}
+						<li><a href="/posts/{{ post.id }}"> {{ post.title }} </a></li>
+					{% endfor %}
+					</ul>
 
-		</div>
+				<!-- New Post Button -->
+				<a href="/users/{{user.id}}/posts/new" class="btn btn-primary"> Add Post</a> 
+			</div>
+
 		</div>
 		</div>
 	</div>
