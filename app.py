@@ -130,3 +130,25 @@ def post_details(post_id):
     user = User.query.get(user_id)
     
     return render_template('user_post_detail.html', user=user, post=post)
+
+@app.route('/posts/<int:post_id>/edit')
+def edit_post(post_id):
+
+    post = Post.query.get(post_id)
+    return render_template('user_post_edit.html',post=post)
+
+@app.route('/posts/<int:post_id>/edit', methods=["POST"])
+def edit_post_submit(post_id):
+
+    # get form  values
+    post_title = request.form['title']
+    post_content = request.form['content']
+    
+    # update post
+    post = Post.query.get(post_id)
+    post.title = post_title
+    post.content = post_content
+
+    db.session.commit()
+    
+    return redirect(f'/posts/{post_id}')
