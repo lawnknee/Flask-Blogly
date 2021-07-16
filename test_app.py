@@ -1,6 +1,4 @@
 from unittest import TestCase
-
-from sqlalchemy.sql.operators import as_
 from app import app
 from models import db, User, Post 
 
@@ -15,13 +13,17 @@ app.config['TESTING'] = True
 app.config['DEBUG_TB_HOSTS'] = ['dont-show-debug-toolbar']
 
 # NOTE: why do we need to move db.drop_all() and db.create_all() into the class
-
+# --> reason for error: we tried to delete the user before post leading to a foreign key error
+# -- FIX --> delete posts before user. 
+db.drop_all()
+db.create_all()
 class UserTestCase(TestCase):
 
     def setUp(self):
 
-        db.drop_all()
-        db.create_all()
+        # db.drop_all()
+        # db.create_all()
+        Post.query.delete()
         User.query.delete()
         test_user = User(first_name="test_first_name", 
                         last_name="test_last_name", 
@@ -80,22 +82,26 @@ class PostTestCase(TestCase):
     def setUp(self):
         """ Creates test users and test posts"""
 
-        db.drop_all()
-        db.create_all()
+        # db.drop_all()
+        # db.create_all()
+        Post.query.delete()
         User.query.delete()
+
+        ##NOTE: if need multiple test user/posts --> can import a dictionary of
+        # cases 
         self.test_user = User(first_name="test_first_name",
                         last_name="test_last_name", image_url="")
         db.session.add(self.test_user)
         db.session.commit()
 
         # create a test db
-        Post.query.delete()
         self.test_post = Post(title="test_title", 
                         content="test_content", 
                         user_id=self.test_user.id)
         db.session.add(self.test_post)
         db.session.commit()
-        
+
+        # add invalid data        
     
     def tearDown(self):
         """Clean up any fouled transaction"""
@@ -110,7 +116,13 @@ class PostTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn('User New Post Form', html)
+
             # test invalid user_id route to 404
+            resp = client.get(f'/users/{2000}/posts/new')
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 404)
+
     
     def test_submit_post_form(self):
         """Tests if new post was successfully submitted."""
@@ -130,8 +142,9 @@ class PostTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn('User Detail Page ', html)
             
-            # check for valid updates
+            # check for valid updates #
             self.assertIn(f'{data["title"]}', html)
+
             
     def test_post_details(self):
         """Tests if post details page loads."""

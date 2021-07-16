@@ -2,6 +2,8 @@
 
 {% block CONTENT %} 
 	<!-- User Detail Page -- for testing -->
+	
+	<!-- User Profile Card -->
 	<div class="card mb-3" style="max-width: 540px;">
 		<div class="row g-0">
 		<div class="col-md-4">
@@ -10,8 +12,7 @@
 		<div class="col-md-8">
 			<div class="card-body">
 				<h3 class="card-title">{{ user.first_name}} {{user.last_name}}</h3> <!-- Will change later-->
-		
-
+				<!-- UI for Deleting and editing -->
 				<form>
 					<button 
 						class="btn btn-danger"
@@ -20,7 +21,7 @@
 						type="submit"> Delete 
 					</button>
 					<button 
-						class="btn btn-secondary"
+						class="btn btn-success"
 						formaction="/users/{{user.id}}/edit" 
 						formmethod="GET" 
 						type="submit">Edit

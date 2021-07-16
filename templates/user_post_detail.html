@@ -3,19 +3,23 @@
 {% block title %} Post Details {% endblock %}
 
 {% block CONTENT %}
-		<!-- Post Details Page -- for testing -->
-		<h1>{{ post.title }}</h1>
-		<p>{{ post.content }}</p>
-		<em>By {{ user.first_name }} {{ user.last_name }}</em> <!-- need to italicize-->
-		
-		
+	<!-- Post Details Page -- for testing -->
+	<main>
+			<h1>{{ post.title }}</h1>
+			<p>{{ post.content }}</p>
+			<span><em>By {{ user.first_name }} {{ user.last_name }}</em></span>
+	
 		<!-- buttons -->
 		<div>
-			<a href="/posts/{{post.user_id}}" class="btn btn-secondary"> Cancel</a>
+			<a href="/users/{{user.id}}" class="btn btn-secondary"> Cancel</a>
 			<a href="/posts/{{post.id}}/edit" class="btn btn-success">Edit</a>
-			<a href="/posts/{{post.id}}/delete" class="btn btn-danger">Delete</a>	
+			<!-- Change to form w/ post request => BC -->
+			
+			<form action="/posts/{{post.id}}/delete" method="post">
+				<button class="btn btn-danger">Delete</button>
+			</form>
+			
 		</div>
-		
-		
+	</main>
 
 {% endblock %}

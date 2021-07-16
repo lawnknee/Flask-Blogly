@@ -26,9 +26,11 @@ class User(db.Model):
                           nullable=False)
     image_url = db.Column(db.Text,
                           default=DEFAULT_URL)
-    # NOTE: why doesn't it work 
-    # posts = db.relationship('Post', backref='user')
-
+    # NOTE: why does cascade work even though we are not using posts (relationship)
+    posts = db.relationship('Post', backref='user', cascade="all,delete-orphan")
+    
+    #NOTE: in python, you  can now access user on post by doing 
+    # __.user
     
     @classmethod
     def add_new_user(cls, first, last, image):
@@ -45,7 +47,7 @@ class User(db.Model):
         # always commit in the view function to close out the transaction
 
 class Post(db.Model):
-
+    """Posts that contain the title, content, content creation time and date"""
     __tablename__ = "posts"
 
     id = db.Column(db.Integer,

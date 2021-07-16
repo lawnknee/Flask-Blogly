@@ -21,7 +21,7 @@ def main_page():
     
     return redirect('/users')
 
-# Handle user routes
+################### Handle user routes #########################
 
 @app.route('/users')
 def show_users():
@@ -58,7 +58,8 @@ def show_user_info(user_id):
     with option to edit or delete the user."""
     
     user = User.query.get_or_404(user_id)
-    posts = Post.query.filter_by(user_id=user_id).all()
+    # posts = Post.query.filter_by(user_id=user_id).all()  use below instead
+    posts = user.posts
     
     return render_template('user_detail.html', user=user, posts=posts)
 
@@ -102,7 +103,7 @@ def delete_user(user_id):
     
     return redirect('/users')
 
-# Handle Posts
+################### Handle Posts #########################
 
 @app.route('/users/<user_id>/posts/new')
 def show_post_form(user_id):
@@ -115,15 +116,16 @@ def show_post_form(user_id):
 def submit_post_form(user_id):
     """Handles submitting new post form.
     Adds post to database and redirects to user detail page."""
-
+    user = User.query.get_or_404(user_id)  # validate user exists  --> tldr you make a post for a user that doesnt exist in db
+                                                                #      because foreign key doesn't exist 
     # get responses from form
     post_title = request.form['title']
     post_content = request.form['content']
 
-    # update database
+    # update database   ---> always validate the data and check (id)
     user_post = Post(title=post_title,
                      content=post_content, 
-                     user_id=user_id)
+                     user_id=user_id)  # NOTE: change user_id to user --> can access user id from line 119 throughout.
     db.session.add(user_post)
     db.session.commit()    
 
@@ -135,9 +137,10 @@ def post_details(post_id):
     edit or delete current post. (post view)"""
 
     post = Post.query.get_or_404(post_id)
-    user_id = post.user_id 
-    user = User.query.get_or_404(user_id)
-    
+    # user = User.query.get_or_404(post.user_id) # in place of this see line 142
+
+    user = post.user  # use instead 
+    # NOTE: can now just pass post if using user.post
     return render_template('user_post_detail.html', user=user, post=post)
 
 @app.route('/posts/<int:post_id>/edit')
@@ -154,12 +157,12 @@ def edit_post_submit(post_id):
     Updates the post in the database and redirects 
     back to post view."""
 
+    post = Post.query.get_or_404(post_id)  #NOTE: always check if id exists first
     # get form  values
     post_title = request.form['title']
     post_content = request.form['content']
     
     # update post
-    post = Post.query.get_or_404(post_id)
     post.title = post_title
     post.content = post_content
 
@@ -167,15 +170,16 @@ def edit_post_submit(post_id):
     
     return redirect(f'/posts/{post_id}')
 
-@app.route('/posts/<int:post_id>/delete')
+# TODO: turn to post request
+@app.route('/posts/<int:post_id>/delete', methods=["POST"])
 def delete_post(post_id):
     """Deletes the current post and redirects back to
     user details page."""
     
     post = Post.query.get_or_404(post_id)
-    user_id = post.user_id 
     
+    # delete should be post requests 
     db.session.delete(post)
     db.session.commit()
     
-    return redirect(f'/users/{user_id}')
+    return redirect(f'/users/{post.user_id}')

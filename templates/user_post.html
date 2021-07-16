@@ -8,19 +8,27 @@
 		<form action="/users/{{user.id}}/posts/new" method="POST">
 			
 			<div class="input-group mb-3">
-				<label for="title" class="input-group-text" id="inputGroup-sizing-default">Title</label>
+				<label for="title" 
+					class="input-group-text" 
+					id="inputGroup-sizing-default">
+					Title
+				</label>
 				<input type="text" name="title" id="title">
 			</div>
 			
 			<div class="input-group mb-3">
-				<label for="content" class="input-group-text" id="inputGroup-sizing-default">Content</label>
+				<label for="content" 
+					class="input-group-text" 
+					id="inputGroup-sizing-default">
+					Content
+				</label>
 				<input type="text" name="content" id="content">
 			</div>
 	
 			<!-- buttons -->
-			<button type="submit">Add</button>
-			<!-- Add Route -->
-			<a href="/users/{{ user.id }}" class="btn btn-success">Cancel</a>
+			<button class="btn btn-primary" type="submit">Add</button>
+			<a href="/users/{{ user.id }}" class="btn btn-secondary">Cancel</a>
+
 		</form>
 
 {% endblock %}
